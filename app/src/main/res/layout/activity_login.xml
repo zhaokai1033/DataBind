@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+
+    <!--这里你也可以为Binding类进行命名，有三种形式 class=
+        1、Custom:会在databinding包下
+        2、.Custom:会在当前的包名下创建
+        3、com.andly.Custom:会在指定的包名下进行创建-->
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="login"
+            type="com.open.code.binding.ModelLogin" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkboxPhone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="@{login.loginType==login.PHONE}"
+                android:onCheckedChanged="@{login.checkChange}"
+                android:text="手机" />
+
+            <CheckBox
+                android:id="@+id/checkboxUser"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="@{login.loginType==login.USER}"
+                android:gravity="center"
+                android:onCheckedChanged="@{login.checkChange}"
+                android:text="用户名" />
+        </LinearLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:afterTextChanged="@{login.textChanged}"
+            android:hint="输入手机号"
+            android:text="@={login.phone}"
+            android:visibility="@{checkboxPhone.checked?View.VISIBLE:View.GONE}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:afterTextChanged="@{login.textChanged}"
+            android:hint="输入用户名"
+            android:text="@={login.user}"
+            android:visibility="@{checkboxUser.checked?View.VISIBLE:View.GONE}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:afterTextChanged="@{login.textChanged}"
+            android:hint="输入验证码"
+            android:text="@={login.code}"
+            android:visibility="@{checkboxPhone.checked?View.VISIBLE:View.GONE}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text='@{"是否可登录"+login.isMatch,default="-------------"}'
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:clickable="@{login.isMatch?true:false}"
+            android:gravity="center"
+            android:onClick="@{()->login.onLoginClick(login.loginType.get())}"
+            android:text="@{login.btName,default=默认}"
+            android:textColor="@{login.isMatch? @color/black:@color/grey}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_margin="10dp"
+            android:scaleType="centerInside"
+            app:url="@{login.imageUrl}" />
+        <include
+            layout="@layout/view_image"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            bind:login="@{login}" />
+    </LinearLayout>
+</layout>
